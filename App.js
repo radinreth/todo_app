@@ -17,6 +17,7 @@ import {
   SafeAreaView,
   StyleSheet
 } from 'react-native';
+import {CheckBox} from 'react-native-elements'
 
 class App extends Component {
   constructor(props) {
@@ -64,10 +65,18 @@ class App extends Component {
               <Text style={styles.todoText}>Add todo</Text>
             </TouchableOpacity>
 
+            
             <Text style={styles.legend}>All todos:</Text>
             <FlatList 
               data={this.state.todos}
-              renderItem={({item, index}) => <Text style={styles.todoItem}>{index+1}. {item.action}</Text>}
+              renderItem={({item, index}) => (
+                <CheckBox
+                title={item.action}
+                containerStyle={styles.checkbox}
+                textStyle={{fontSize: 18,}}
+                checked={true}
+              />
+              )}
               keyExtractor={item=>item.id}
             />
         </View>
@@ -105,6 +114,12 @@ const styles = StyleSheet.create({
   todoItem: {
     margin: 5,
     fontSize: 18
+  },
+  checkbox: {
+    backgroundColor: 'transparent', 
+    borderWidth: 0,
+    padding: 5,
+    margin: 5
   }
 })
 
