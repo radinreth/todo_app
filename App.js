@@ -28,12 +28,12 @@ class App extends Component {
         {
           id: '1',
           action: 'Buy new Monitor',
-          status: 'pending'
+          completed: false
         },
         {
           id: '2',
           action: 'Build Native App',
-          status: 'completed'
+          completed: true,
         }
       ] 
     }
@@ -42,12 +42,27 @@ class App extends Component {
   addTodo = () => {
     let {text, todos} = this.state
     this.setState( prev => ({
-      todos: [...todos, { id: String(prev.todos.length+1), action: text, status: 'pending'}]
+      todos: [...todos, { id: String(prev.todos.length+1), action: text, completed: false}]
       }))
 
     this.setState({text: ''})
   }
+
+  setCompleted = (e, item) => {
+    let { todos } = this.state
+    let { id, action, completed } = item
+
+    this.setState( {
+      todos: todos.map(todo => (
+          todo.id != item.id ? 
+            todo : 
+            { id,action, completed: !completed }
+        ))
+      } )
+  }
+
   render() {
+    const completed = this.state.todos.filter(todo => todo.completed)
     return (
       <SafeAreaView style={{flex: 1}}>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -65,17 +80,19 @@ class App extends Component {
               <Text style={styles.todoText}>Add todo</Text>
             </TouchableOpacity>
 
-            
             <Text style={styles.legend}>All todos:</Text>
+            <Text>Completed: {completed.length}/{this.state.todos.length}</Text>
+
             <FlatList 
               data={this.state.todos}
               renderItem={({item, index}) => (
                 <CheckBox
-                title={item.action}
-                containerStyle={styles.checkbox}
-                textStyle={{fontSize: 18,}}
-                checked={true}
-              />
+                  title={item.action}
+                  containerStyle={styles.checkbox}
+                  textStyle={{fontSize: 18,}}
+                  checked={item.completed}
+                  onPress={(e) => this.setCompleted(e, item)}
+                />
               )}
               keyExtractor={item=>item.id}
             />
