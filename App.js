@@ -64,7 +64,7 @@ class App extends Component {
 
   render() {
     const completed = this.state.todos.filter(todo => todo.completed)
-    
+
     return (
       <SafeAreaView style={{flex: 1}}>
         <View style={ styles.container }>
@@ -84,6 +84,7 @@ class App extends Component {
 
             <FlatList 
               data={this.state.todos}
+              keyboardShouldPersistTaps='handled'
               renderItem={({item}) => (
                 <CheckBox
                   title={item.action}
