@@ -10,14 +10,11 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
-  Button,
-  TouchableOpacity,
-  TextInput,
   FlatList,
   SafeAreaView,
   StyleSheet
 } from 'react-native';
-import {CheckBox} from 'react-native-elements'
+import { Input, Button, CheckBox } from 'react-native-elements'
 
 class App extends Component {
   constructor(props) {
@@ -41,9 +38,13 @@ class App extends Component {
 
   addTodo = () => {
     let {text, todos} = this.state
+
     this.setState( prev => ({
-      todos: [...todos, { id: String(prev.todos.length+1), action: text, completed: false}]
-      }))
+      todos:  [ ...todos, 
+                { id: String(prev.todos.length+1), action: text, completed: false}
+              ]
+      })
+    )
 
     this.setState({text: ''})
   }
@@ -63,29 +64,27 @@ class App extends Component {
 
   render() {
     const completed = this.state.todos.filter(todo => todo.completed)
+    
     return (
       <SafeAreaView style={{flex: 1}}>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <TextInput
-            style={styles.inputTodo}
-            placeholder="Type here..."
-            onChangeText={(text) => this.setState({text})}
-            value={this.state.text}
+        <View style={ styles.container }>
+          <Input
+              containerStyle={{margin: 20}}
+              leftIconContainerStyle={{marginRight: 15}}
+              placeholder='Type here...'
+              leftIcon={{ type: 'font-awesome', name: 'pencil' }}
+              onChangeText={(text) => this.setState({text})}
+              value={this.state.text}
             />
 
-            <TouchableOpacity 
-              style={styles.btnAdd}
-              onPress={this.addTodo}
-              >
-              <Text style={styles.todoText}>Add todo</Text>
-            </TouchableOpacity>
+            <Button onPress={this.addTodo} title="Add todo"/>
 
             <Text style={styles.legend}>All todos:</Text>
             <Text>Completed: {completed.length}/{this.state.todos.length}</Text>
 
             <FlatList 
               data={this.state.todos}
-              renderItem={({item, index}) => (
+              renderItem={({item}) => (
                 <CheckBox
                   title={item.action}
                   containerStyle={styles.checkbox}
@@ -103,6 +102,12 @@ class App extends Component {
 };
 
 const styles = StyleSheet.create({
+  container: { 
+    flex: 1, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    backgroundColor: 'lavender' 
+  },
   inputTodo: {
     height: 40, 
     fontSize: 23, 
